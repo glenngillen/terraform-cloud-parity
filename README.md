@@ -56,7 +56,7 @@ Outputs:
 pet = intense-cod
 ```
 
-``bash
+```bash
 $ terraform plan -refresh=false
 
 No changes. Infrastructure is up-to-date.
