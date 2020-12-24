@@ -65,3 +65,42 @@ This means that Terraform did not detect any differences between your
 configuration and real physical resources that exist. As a result, no
 actions need to be performed.
 ```
+
+## Import
+
+I went a meta on this demo, which makes it difficult to reproduce cleanly from this repo without
+making a number of changes and jumping through hoops of switching back and forth between local
+and remote backends. Which is exactly the problem we're trying to overcome sooo 🤷‍♂️, I guess it's
+🐢 all the way down.
+
+### Reproduction
+
+```bash
+$ terraform import -lock=false tfe_organization.demo Compu-Global-Hyper-Mega-Net
+
+Warning: Value for var.TFE_TOKEN unavailable
+
+The value of variable "TFE_TOKEN" is marked as sensitive in the remote
+workspace. This operation always runs locally, so the value for that variable
+is not available.
+
+Error: required token could not be found
+
+  on /Users/glenngillen/Development/terraform-cloud-parity/main.tf line 12, in provider "tfe":
+  12: provider "tfe" {
+```
+
+```bash
+$ TF_VAR_TFE_TOKEN=my-token-here terraform import -lock=false tfe_organization.demo Compu-Global-Hyper-Mega-Net
+
+Warning: Value for var.TFE_TOKEN unavailable
+
+The value of variable "TFE_TOKEN" is marked as sensitive in the remote
+workspace. This operation always runs locally, so the value for that variable
+is not available.
+
+Error: required token could not be found
+
+  on /Users/glenngillen/Development/terraform-cloud-parity/main.tf line 12, in provider "tfe":
+  12: provider "tfe" {
+```

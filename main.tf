@@ -1,19 +1,18 @@
 terraform {
   backend "remote" {}
 }
-variable "tfe_hostname" {
+variable "TFE_HOSTNAME" {
   description = "The Terraform Enterprise hostname to connect to. Defaults to app.terraform.io."
   default     = "app.terraform.io"
 }
 
-variable "tfe_token" {
+variable "TFE_TOKEN" {
   description = "The token used to authenticate with Terraform Enterprise"
 }
 provider "tfe" {
-  hostname = var.tfe_hostname
-  token    = var.tfe_token
+  hostname = var.TFE_HOSTNAME
+  token    = var.TFE_TOKEN
 }
-# variable "secret_key" {}
 
 resource "tfe_organization" "demo" {
   name  = "Compu-Global-Hyper-Mega-Net"
@@ -23,13 +22,14 @@ resource "tfe_organization" "demo" {
 resource "tfe_workspace" "demo" {
   name         = "terraform-cloud-parity"
   organization = tfe_organization.demo.id
+  queue_all_runs = false
 }
 resource "tfe_variable" "demo" {
   key          = "secret_key"
   value        = "not-actually-a-secret"
   category     = "terraform"
   workspace_id = tfe_workspace.demo.id
-  description  = "demonstrating sensitive variable and import issues"
+  sensitive    = true
 }
 resource "random_pet" "demo" {
   # keepers = {
@@ -37,6 +37,6 @@ resource "random_pet" "demo" {
   # }
 }
 
-output "pet" {
-  value = random_pet.demo.id
-}
+# output "pet" {
+#   value = random_pet.demo.id
+# }
